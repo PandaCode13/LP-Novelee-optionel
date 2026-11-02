@@ -25,7 +25,7 @@
   --color-cream: #f8eee8;
   --color-white: #fff;
   --font-display: 'Bellefair', Georgia, serif;
-  --content-width: 1160px;
+  --content-width: 1200px;
 }
 
 * {
@@ -36,11 +36,13 @@ html {
   min-width: 320px;
   scroll-behavior: smooth;
   scroll-padding-top: 92px;
+  overflow-x: clip;
 }
 
 body {
   min-width: 320px;
   margin: 0;
+  overflow-x: clip;
 }
 
 body,
