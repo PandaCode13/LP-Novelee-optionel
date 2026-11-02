@@ -1,0 +1,213 @@
+import { useState, type FormEvent } from 'react'
+import { Link } from 'react-router-dom'
+import { siteConfig } from '../../lib/siteConfig'
+
+type AuthenticationMode = 'login' | 'register' | 'reset'
+
+const pageContent: Record<
+  AuthenticationMode,
+  { eyebrow: string; title: string; description: string; submit: string }
+> = {
+  login: {
+    eyebrow: 'Heureux de te revoir',
+    title: 'Retrouve ta communauté.',
+    description: 'Connecte-toi pour retrouver tes échanges et tes prochaines lectures.',
+    submit: 'Me connecter',
+  },
+  register: {
+    eyebrow: 'Bienvenue chez Novelee',
+    title: 'Chaque belle histoire commence quelque part.',
+    description: 'Crée ton compte et rencontre des lecteurs qui te ressemblent.',
+    submit: 'Créer mon compte',
+  },
+  reset: {
+    eyebrow: 'Un petit oubli ?',
+    title: 'On t’aide à revenir.',
+    description: 'Indique ton e-mail et nous t’enverrons les instructions pour choisir un nouveau mot de passe.',
+    submit: 'Envoyer les instructions',
+  },
+}
+
+function AuthenticationPage({ mode }: { mode: AuthenticationMode }) {
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [consent, setConsent] = useState(false)
+  const [feedback, setFeedback] = useState('')
+  const [success, setSuccess] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const content = pageContent[mode]
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+    setFeedback('')
+    setSuccess(false)
+
+    if (!siteConfig.authApiUrl) {
+      setFeedback(
+        'La connexion n’est pas encore activée. Le service d’authentification doit être configuré.',
+      )
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const response = await fetch(siteConfig.authApiUrl, {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          action: mode,
+          email,
+          ...(mode !== 'reset' ? { password } : {}),
+          ...(mode === 'register' ? { consent } : {}),
+        }),
+      })
+
+      if (!response.ok) {
+        throw new Error(
+          mode === 'reset'
+            ? 'Impossible d’envoyer les instructions pour le moment.'
+            : 'E-mail ou mot de passe invalide, ou service indisponible.',
+        )
+      }
+
+      setSuccess(true)
+      setFeedback(
+        mode === 'reset'
+          ? 'Si un compte correspond à cette adresse, tu recevras un e-mail avec les instructions.'
+          : mode === 'register'
+            ? 'Ton compte a bien été créé. Tu peux maintenant te connecter.'
+            : 'Connexion réussie !',
+      )
+      if (mode === 'reset') setEmail('')
+      if (mode === 'register') {
+        setEmail('')
+        setPassword('')
+        setConsent(false)
+      }
+    } catch (error) {
+      setFeedback(
+        error instanceof Error
+          ? error.message
+          : 'Une erreur est survenue. Vérifie ta connexion et réessaie.',
+      )
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <main className="auth-page" id="main-content">
+      <div className="auth-layout">
+        <aside className="auth-story">
+          <span className="auth-ornament" aria-hidden="true">✳</span>
+          <p className="eyebrow">Novelee, au fil des pages</p>
+          <p className="auth-quote">
+            « Les livres sont encore meilleurs <em>à plusieurs.</em> »
+          </p>
+          <p className="auth-story-note">
+            Des lecteurs qui te ressemblent, des discussions sans spoilers, et de belles
+            découvertes à partager.
+          </p>
+          <div className="auth-book" aria-hidden="true">
+            <span>✧</span>
+            <strong>Une histoire<br />à vivre ensemble</strong>
+            <small>NOVELEE · DEPUIS LA PREMIÈRE PAGE</small>
+          </div>
+        </aside>
+
+        <section className="auth-panel" aria-labelledby="auth-title">
+          <Link className="auth-back-link" to="/">← Retour à l’accueil</Link>
+          <p className="eyebrow">{content.eyebrow}</p>
+          <h1 id="auth-title">{content.title}</h1>
+          <p className="auth-description">{content.description}</p>
+
+          <form className="auth-form" onSubmit={handleSubmit}>
+            <label className="field-label" htmlFor="auth-email">Adresse e-mail</label>
+            <input
+              className="email-input"
+              id="auth-email"
+              name="email"
+              type="email"
+              autoComplete="email"
+              placeholder="toi@exemple.fr"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required
+            />
+
+            {mode !== 'reset' && (
+              <>
+                <div className="auth-password-label">
+                  <label className="field-label" htmlFor="auth-password">Mot de passe</label>
+                  {mode === 'login' && (
+                    <Link to="/mot-de-passe-oublie">Mot de passe oublié ?</Link>
+                  )}
+                </div>
+                <input
+                  className="email-input"
+                  id="auth-password"
+                  name="password"
+                  type="password"
+                  autoComplete={mode === 'register' ? 'new-password' : 'current-password'}
+                  minLength={8}
+                  placeholder="8 caractères minimum"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required
+                />
+              </>
+            )}
+
+            {mode === 'register' && (
+              <label className="consent-check auth-consent" htmlFor="auth-consent">
+                <input
+                  id="auth-consent"
+                  name="consent"
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(event) => setConsent(event.target.checked)}
+                  required
+                />
+                <span>
+                  J’accepte les <Link to="/conditions-utilisation">conditions d’utilisation</Link> et
+                  la <Link to="/confidentialite">politique de confidentialité</Link>.
+                </span>
+              </label>
+            )}
+
+            <button className="button button-primary auth-submit" type="submit" disabled={submitting}>
+              {submitting ? 'Un instant…' : content.submit}
+              <span aria-hidden="true">→</span>
+            </button>
+            <p
+              className="form-feedback auth-feedback"
+              role={success ? 'status' : 'alert'}
+              aria-live="polite"
+            >
+              {feedback}
+            </p>
+          </form>
+
+          {mode === 'login' && (
+            <p className="auth-switch">
+              Pas encore de compte ? <Link to="/inscription">Créer un compte</Link>
+            </p>
+          )}
+          {mode === 'register' && (
+            <p className="auth-switch">
+              Tu as déjà un compte ? <Link to="/connexion">Se connecter</Link>
+            </p>
+          )}
+          {mode === 'reset' && (
+            <p className="auth-switch">
+              Tu as retrouvé ton mot de passe ? <Link to="/connexion">Retour à la connexion</Link>
+            </p>
+          )}
+        </section>
+      </div>
+    </main>
+  )
+}
+
+export default AuthenticationPage
