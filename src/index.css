@@ -1,0 +1,89 @@
+@import '@fontsource/bellefair/400.css';
+@import '@fontsource/jost/400.css';
+@import '@fontsource/jost/500.css';
+@import '@fontsource/jost/600.css';
+@import '@fontsource/jost/700.css';
+
+:root {
+  font-family: 'Jost', sans-serif;
+  color: #302329;
+  background: #fffaf6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-optical-sizing: auto;
+  font-weight: 400;
+
+  --color-primary: #b0183e;
+  --color-primary-dark: #85102f;
+  --color-secondary: #f85e5a;
+  --color-accent: #fdd468;
+  --color-ink: #302329;
+  --color-muted: #71646a;
+  --color-paper: #fffaf6;
+  --color-cream: #f8eee8;
+  --color-white: #fff;
+  --font-display: 'Bellefair', Georgia, serif;
+  --content-width: 1160px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+  scroll-padding-top: 92px;
+}
+
+body {
+  min-width: 320px;
+  margin: 0;
+}
+
+body,
+button,
+input {
+  font-family: 'Jost', sans-serif;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a {
+  color: inherit;
+}
+
+button {
+  color: inherit;
+}
+
+img,
+svg {
+  display: block;
+}
+
+::selection {
+  color: var(--color-white);
+  background: var(--color-primary);
+}
+
+:focus-visible {
+  outline: 3px solid #6c3b00;
+  outline-offset: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
