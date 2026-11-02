@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { siteConfig } from '../../lib/siteConfig'
 
 const navigation = [
   { label: 'Les problèmes', href: '/#problemes' },
@@ -63,13 +62,13 @@ function Header() {
               {item.label}
             </a>
           ))}
-          <a
+          <Link
             className="nav-join"
-            href={siteConfig.mvpUrl}
+            to="/connexion"
             onClick={() => setMenuOpen(false)}
           >
             Rejoins-nous
-          </a>
+          </Link>
         </nav>
       </div>
     </header>
