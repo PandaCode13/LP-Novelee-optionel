@@ -1,5 +1,12 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
+import {
+  isValidUserRole,
+  loginLocalAccount,
+  registerLocalAccount,
+  startUserSession,
+  type AuthUser,
+} from './authService'
 import { siteConfig } from '../../lib/siteConfig'
 
 type AuthenticationMode = 'login' | 'register' | 'reset'
@@ -36,21 +43,27 @@ function AuthenticationPage({ mode }: { mode: AuthenticationMode }) {
   const [success, setSuccess] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const content = pageContent[mode]
+  const navigate = useNavigate()
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setFeedback('')
     setSuccess(false)
 
-    if (!siteConfig.authApiUrl) {
-      setFeedback(
-        'La connexion n’est pas encore activée. Le service d’authentification doit être configuré.',
-      )
-      return
-    }
-
     setSubmitting(true)
     try {
+      if (!siteConfig.authApiUrl) {
+        if (mode === 'reset') {
+          throw new Error('La réinitialisation par e-mail nécessite un service d’authentification configuré.')
+        }
+
+        const user = mode === 'register'
+          ? await registerLocalAccount(email, password)
+          : await loginLocalAccount(email, password)
+        navigate(user.role === 'admin' ? '/admin/dashboard' : '/dashboard', { replace: true })
+        return
+      }
+
       const response = await fetch(siteConfig.authApiUrl, {
         method: 'POST',
         credentials: 'include',
@@ -67,8 +80,41 @@ function AuthenticationPage({ mode }: { mode: AuthenticationMode }) {
         throw new Error(
           mode === 'reset'
             ? 'Impossible d’envoyer les instructions pour le moment.'
-            : 'E-mail ou mot de passe invalide, ou service indisponible.',
+            : mode === 'register'
+              ? 'Impossible de créer le compte pour le moment.'
+              : 'E-mail ou mot de passe invalide, ou service indisponible.',
         )
+      }
+
+      if (mode === 'login') {
+        const payload: unknown = await response.json()
+        const responseUser =
+          typeof payload === 'object' && payload !== null && 'user' in payload
+            ? payload.user
+            : payload
+
+        if (
+          typeof responseUser !== 'object' ||
+          responseUser === null ||
+          !('email' in responseUser) ||
+          typeof responseUser.email !== 'string' ||
+          !('role' in responseUser) ||
+          !isValidUserRole(responseUser.role)
+        ) {
+          throw new Error('La réponse du service doit contenir un utilisateur avec un rôle « user » ou « admin ».')
+        }
+
+        const user: AuthUser = {
+          email: responseUser.email,
+          role: responseUser.role,
+          createdAt:
+            'createdAt' in responseUser && typeof responseUser.createdAt === 'string'
+              ? responseUser.createdAt
+              : new Date().toISOString(),
+        }
+        startUserSession(user)
+        navigate(user.role === 'admin' ? '/admin/dashboard' : '/dashboard', { replace: true })
+        return
       }
 
       setSuccess(true)
@@ -188,6 +234,20 @@ function AuthenticationPage({ mode }: { mode: AuthenticationMode }) {
               {feedback}
             </p>
           </form>
+
+          {mode === 'login' && !siteConfig.authApiUrl && import.meta.env.DEV && (
+            <p className="auth-demo-hint">
+              <span>Compte membre de démonstration :</span>
+              <strong>lecteur@novelee.test</strong>
+              <span>Mot de passe :</span>
+              <strong>DemoUser!2026</strong>
+              <span className="auth-demo-separator" aria-hidden="true" />
+              <span>Compte admin de démonstration :</span>
+              <strong>admin@novelee.test</strong>
+              <span>Mot de passe :</span>
+              <strong>DemoAdmin!2026</strong>
+            </p>
+          )}
 
           {mode === 'login' && (
             <p className="auth-switch">

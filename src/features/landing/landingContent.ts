@@ -41,34 +41,34 @@ export const solutions = [
 
 export const services = [
   {
-    icon: '✧',
+    illustration: 'recommendations',
     title: 'Recommandations sur mesure',
     description: 'Découvre ton prochain coup de cœur grâce à tes lectures et aux avis de lecteurs proches.',
   },
   {
-    icon: '☏',
+    illustration: 'chat',
     title: 'Chat en temps réel',
     description: 'Prolonge une lecture dans des échanges privés ou des conversations de groupe.',
   },
   {
-    icon: '▤',
+    illustration: 'library',
     title: 'Ta bibliothèque vivante',
     description: 'Garde une trace de tes lectures, partage tes reviews et retrouve tes envies.',
   },
   {
-    icon: '◉',
+    illustration: 'groups',
     title: 'Groupes par livre et par genre',
     description: 'Rejoins des micro-communautés où les discussions vont droit au cœur des histoires.',
   },
   {
-    icon: '♧',
+    illustration: 'challenges',
     title: 'Défis et rendez-vous',
     description: 'Lis à ton rythme, participe aux défis et retrouve la communauté autour d’événements.',
   },
   {
-    icon: '✳',
+    illustration: 'assistant',
     title: 'Un coup de pouce IA',
     description: 'Un assistant suggère des lectures et aide à lancer la conversation. Tu gardes toujours la main.',
     ai: true,
   },
-]
+] as const
