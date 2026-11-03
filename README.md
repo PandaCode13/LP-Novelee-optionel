@@ -2,6 +2,12 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## Local authentication demo
+
+When `VITE_AUTH_API_URL` is not configured, registration and login use a browser-local demo store. New registrations always receive the `user` role. In development, the member dashboard can be opened with `lecteur@novelee.test` / `DemoUser!2026`, and the admin dashboard with `admin@novelee.test` / `DemoAdmin!2026`.
+
+This client-side demo is not secure authentication: browser storage and roles can be modified by the visitor, and accounts are limited to that browser. Do not use it for production accounts or sensitive data. A production authentication service must validate passwords and roles on the server, return the authenticated user as `{ "user": { "email": "...", "role": "user" | "admin" } }` for login, and enforce that public registrations receive the `user` role.
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

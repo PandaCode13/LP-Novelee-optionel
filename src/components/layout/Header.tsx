@@ -1,5 +1,7 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { clearCurrentUser, getCurrentUser } from '../../features/auth/authService'
+import { navByRole, type NavItem } from '../../lib/navigation'
 
 const navigation = [
   { label: 'Les problèmes', href: '/#problemes' },
@@ -21,8 +23,66 @@ function BrandMark() {
   )
 }
 
+function readHeaderUser() {
+  try {
+    return getCurrentUser()
+  } catch {
+    return null
+  }
+}
+
 function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const navigate = useNavigate()
+  const user = readHeaderUser()
+
+  function signOut() {
+    clearCurrentUser()
+    setMenuOpen(false)
+    navigate('/connexion')
+  }
+
+  function renderItem(item: NavItem, key: string) {
+    if (item.action === 'logout') {
+      return (
+        <button className="nav-action" key={key} type="button" onClick={signOut}>
+          {item.label}
+        </button>
+      )
+    }
+
+    if (item.children?.length) {
+      return (
+        <div className="nav-profile" key={key}>
+          <Link
+            to={item.to}
+            aria-current={location.pathname === item.to ? 'page' : undefined}
+            onClick={() => setMenuOpen(false)}
+          >
+            {item.label}
+          </Link>
+          <details className="nav-dropdown">
+            <summary aria-label={`Ouvrir le menu ${item.label}`}>⌄</summary>
+            <div className="nav-dropdown-panel">
+              {item.children.map((child) => renderItem(child, `${key}-${child.to}`))}
+            </div>
+          </details>
+        </div>
+      )
+    }
+
+    return (
+      <Link
+        key={key}
+        to={item.to}
+        aria-current={location.pathname === item.to ? 'page' : undefined}
+        onClick={() => setMenuOpen(false)}
+      >
+        {item.label}
+      </Link>
+    )
+  }
 
   return (
     <header className="site-header">
@@ -57,18 +117,24 @@ function Header() {
           id="main-navigation"
           aria-label="Navigation principale"
         >
-          {navigation.map((item) => (
-            <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
-              {item.label}
-            </a>
-          ))}
-          <Link
-            className="nav-join"
-            to="/connexion"
-            onClick={() => setMenuOpen(false)}
-          >
-            Rejoins-nous
-          </Link>
+          {user ? (
+            navByRole[user.role].map((item) => renderItem(item, item.to))
+          ) : (
+            <>
+              {navigation.map((item) => (
+                <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
+                  {item.label}
+                </a>
+              ))}
+              <Link
+                className="nav-join"
+                to="/connexion"
+                onClick={() => setMenuOpen(false)}
+              >
+                Rejoins-nous
+              </Link>
+            </>
+          )}
         </nav>
       </div>
     </header>

@@ -1,0 +1,186 @@
+.role-area {
+  min-height: calc(100vh - 78px);
+  padding: clamp(36px, 6vw, 72px) 20px;
+  background: #fff8f2;
+}
+
+.role-area-shell {
+  width: min(1050px, 100%);
+  margin: 0 auto;
+}
+
+.role-area-shell > .eyebrow {
+  margin-bottom: 10px;
+}
+
+.role-area h1 {
+  margin: 0;
+  color: #35151c;
+  font-family: var(--font-display);
+  font-size: clamp(38px, 5vw, 54px);
+  font-weight: 400;
+  line-height: 1.05;
+}
+
+.role-area-intro {
+  margin: 12px 0 28px;
+  color: #72545a;
+  line-height: 1.6;
+}
+
+.role-area-panel {
+  padding: clamp(20px, 4vw, 30px);
+  border: 1px solid #f2d8cc;
+  border-radius: 20px;
+  background: #fffefc;
+}
+
+.role-area-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 18px;
+}
+
+.role-area-panel h2 {
+  margin: 0;
+  color: #35151c;
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+.role-area-account {
+  color: #72545a;
+  font-size: 13px;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.role-area-empty {
+  margin: 0;
+  padding: 18px;
+  border-radius: 12px;
+  background: #fff8f2;
+  color: #72545a;
+  line-height: 1.55;
+}
+
+.role-area-profile {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.role-area-profile > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 15px 0;
+  border-bottom: 1px solid #f2d8cc;
+}
+
+.role-area-profile dt {
+  color: #72545a;
+}
+
+.role-area-profile dd {
+  margin: 0;
+  color: #35151c;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.role-area-table-wrap {
+  overflow-x: auto;
+}
+
+.role-area-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.role-area-table th,
+.role-area-table td {
+  padding: 13px 10px;
+  border-bottom: 1px solid #f2d8cc;
+  color: #72545a;
+  font-size: 14px;
+}
+
+.role-area-table th {
+  color: #35151c;
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.role-area-table td:first-child {
+  color: #35151c;
+  overflow-wrap: anywhere;
+}
+
+.role-area-role {
+  display: inline-block;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: #f7e9dd;
+  color: #790d32;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.role-area-role.role-admin {
+  background: #ffe9b5;
+  color: #68420a;
+}
+
+.role-area-error {
+  color: #a51d49;
+}
+
+.role-area-note {
+  margin: 20px 0 0;
+  padding: 13px 16px;
+  border-left: 3px solid #f28a78;
+  background: #fffefc;
+  color: #72545a;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.role-area > .role-area-panel {
+  width: min(560px, 100%);
+  margin: 5vh auto;
+  text-align: center;
+}
+
+.role-area > .role-area-panel h1 {
+  font-size: 36px;
+}
+
+@media (max-width: 600px) {
+  .role-area-panel-heading {
+    flex-direction: column;
+  }
+
+  .role-area-account {
+    text-align: left;
+  }
+
+  .role-area-table {
+    min-width: 500px;
+  }
+
+  .role-area-profile > div {
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .role-area-profile dd {
+    text-align: left;
+  }
+}
