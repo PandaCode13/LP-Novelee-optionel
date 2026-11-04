@@ -1,32 +1,39 @@
-# Design system Novelee
+# Référentiel visuel Novelee
 
-Ce document décrit les conventions visuelles utilisées dans le frontend. Il sert de référence pour créer ou faire évoluer les pages sans rompre la cohérence de l’interface.
+Ce document rassemble les conventions visuelles du frontend. Il sert de guide lors de
+la création ou de la modification d’écrans; les styles effectivement présents dans le
+code restent la source de vérité.
 
-## Identité visuelle
+## Direction artistique
 
-Novelee s’inspire de l’univers éditorial du livre : une ambiance chaleureuse et élégante, des tons crème, des accents bordeaux et corail, et une typographie de lecture à empattements pour les titres. L’interface doit rester conviviale, lisible et sans surcharge décorative.
+Novelee reprend les codes d’un univers éditorial et chaleureux : fonds crème, tons
+bordeaux et corail, typographie à empattements pour les titres et interface sobre.
+L’identité doit rester accueillante et lisible. Les ornements ne doivent jamais nuire
+à la hiérarchie du contenu ni à l’usage.
 
 ## Couleurs
 
 ### Palette globale
 
-Ces couleurs sont définies comme variables CSS dans `src/index.css`.
+Les principales couleurs de l’interface sont définies dans `src/index.css`.
 
-| Rôle | Valeur | Usage |
+| Rôle | Valeur | Utilisation |
 | --- | --- | --- |
-| Primaire | `#B0183E` | Actions, liens et éléments de marque. |
-| Primaire foncée | `#85102F` | Survol et contraste renforcé des actions. |
-| Secondaire | `#F85E5A` | Accent corail global. |
-| Accent | `#FDD468` | Détails lumineux et décoratifs. |
-| Encre | `#302329` | Texte principal global. |
+| Primaire | `#B0183E` | Actions et repères de marque. |
+| Primaire foncée | `#85102F` | Variantes renforcées et états de survol. |
+| Secondaire | `#F85E5A` | Accent corail. |
+| Accent | `#FDD468` | Détails et éléments décoratifs. |
+| Encre | `#302329` | Texte principal. |
 | Texte secondaire | `#71646A` | Descriptions et informations secondaires. |
 | Papier | `#FFFAF6` | Fond général. |
-| Crème | `#F8EEE8` | Fonds de sections douces. |
-| Blanc | `#FFFFFF` | Surfaces et texte sur fond sombre. |
+| Crème | `#F8EEE8` | Surfaces et sections douces. |
+| Blanc | `#FFFFFF` | Surfaces et contenu sur fond sombre. |
 
 ### Palette de la section Communauté
 
-La section des services emploie une palette dédiée, isolée dans `src/features/landing/ServicesSection.css`.
+La section des services définit une palette locale dans
+`src/features/landing/ServicesSection.css`. La garder isolée évite de modifier
+l’apparence globale par inadvertance.
 
 | Rôle | Valeur |
 | --- | --- |
@@ -42,44 +49,63 @@ La section des services emploie une palette dédiée, isolée dans `src/features
 ## Typographie
 
 - **Titres et citations :** Bellefair, avec Georgia comme police de repli.
-- **Texte courant et interface :** Jost, avec une police sans-serif système en repli.
-- **Titres :** poids léger à normal, tailles fluides et interlignage resserré.
-- **Paragraphes :** interlignage généreux pour faciliter la lecture.
-- **Libellés et badges :** Jost en semi-gras ou gras; les petits badges éditoriaux peuvent utiliser les capitales et l’espacement des lettres.
+- **Texte courant et interface :** Jost, puis une police sans empattements système.
+- **Hiérarchie :** titres expressifs et resserrés; corps de texte confortable à lire;
+  libellés et badges clairement différenciés.
+- **Chargement :** les fontes sont importées depuis `@fontsource/bellefair` et
+  `@fontsource/jost` dans `src/index.css`.
 
-Les polices sont chargées localement depuis `@fontsource/bellefair` et `@fontsource/jost`.
+Privilégier les styles et niveaux typographiques déjà présents plutôt que de créer
+des variantes ponctuelles sans besoin fonctionnel.
 
 ## Mise en page et composants
 
-- Largeur de contenu globale : jusqu’à `1200px`, avec marges fluides.
-- Sections : espacements verticaux généreux, ajustés sur les petits écrans.
-- Cartes : fonds clairs, bordures discrètes, coins arrondis et ombres légères.
-- Actions principales : fond primaire, texte contrasté, forme arrondie.
-- Icônes décoratives : SVG intégrés et palette assortie; les éléments purement décoratifs sont masqués aux lecteurs d’écran.
-- Navigation : liens simples, menus de profil déroulants et action de déconnexion rendue en bouton.
+- La largeur de contenu globale de référence est `1200px` (`--content-width`).
+- Conserver des marges fluides et un espacement généreux entre les sections.
+- Construire les cartes avec une hiérarchie claire, des surfaces claires, des bordures
+  discrètes et des arrondis cohérents avec les composants voisins.
+- Réserver la couleur primaire aux actions et aux repères importants; maintenir un
+  contraste suffisant entre texte, fond et contrôles.
+- Placer les styles partagés dans `src/index.css` ou `src/App.css`, et les styles
+  spécifiques près de la page ou de la fonctionnalité concernée.
+- Réutiliser les composants et motifs existants avant d’ajouter une nouvelle
+  implémentation.
 
-Les styles globaux sont dans `src/index.css` et `src/App.css`. Les styles propres à une section ou à une page doivent rester dans leur feuille dédiée, comme `ServicesSection.css` et `DashboardPage.css`.
+## Adaptation aux écrans
 
-## Responsive
+Le site prend en charge les viewports à partir de `320px`. Chaque composant doit
+s’adapter à la largeur disponible sans créer de défilement horizontal.
 
-- **Mobile :** une colonne pour les grilles principales, menu compact, composants adaptés à la largeur disponible.
-- **Tablette :** grilles souvent en deux colonnes et espacements réduits.
-- **Ordinateur :** grilles pouvant passer à trois colonnes et navigation horizontale.
-- Les seuils sont définis par composant dans les media queries; les styles de la section Communauté utilisent notamment les paliers `767px` et `1199px`.
-- Aucun composant ne doit provoquer de débordement horizontal à partir de `320px`.
+- **Mobile :** privilégier une colonne, des contrôles faciles à utiliser et une
+  navigation compacte.
+- **Tablette :** ajuster les espacements et organiser les grilles selon le contenu.
+- **Grand écran :** exploiter les grilles et la navigation horizontale lorsque cela
+  améliore la lecture.
+
+Les seuils responsive sont définis par composant dans les media queries. Vérifier les
+changements aux largeurs réellement utilisées par l’interface plutôt que de supposer
+un breakpoint universel.
 
 ## Accessibilité et mouvement
 
-- Chaque contrôle interactif doit être accessible au clavier et avoir un libellé explicite.
-- Le focus clavier est visible avec `:focus-visible`.
-- Respecter les niveaux de contraste suffisants pour le texte et les actions.
-- Les illustrations informatives reçoivent un texte alternatif; les ornements décoratifs utilisent `aria-hidden="true"`.
-- Les animations et transitions doivent rester discrètes et tenir compte de `prefers-reduced-motion`, déjà pris en charge globalement.
+- Fournir un nom explicite à chaque champ et contrôle interactif.
+- Garder tous les parcours utilisables au clavier et préserver le style `:focus-visible`
+  global.
+- Associer les messages d’état et d’erreur aux contrôles concernés.
+- Donner un texte alternatif aux images informatives; masquer les ornements décoratifs
+  aux technologies d’assistance (`aria-hidden="true"`).
+- Maintenir une structure de titres cohérente et un contraste suffisant.
+- Respecter `prefers-reduced-motion`; les styles globaux réduisent déjà les animations,
+  transitions et défilements animés lorsque cette préférence est active.
 
-## Principes à respecter
+## Principes de contribution
 
-1. Réutiliser les couleurs, polices et composants existants avant d’ajouter de nouveaux styles.
-2. Garder les couleurs d’une section isolées si elles ne sont pas destinées à tout le site.
-3. Privilégier la lisibilité et la hiérarchie du contenu aux ornements.
-4. Tester les layouts sur mobile, tablette et ordinateur.
-5. Ne pas considérer les protections de navigation côté client comme une sécurité serveur; voir la note d’authentification dans le [`README.md`](./README.md).
+1. Vérifier les variables, composants et styles existants avant d’introduire une
+   nouvelle couleur ou un nouveau motif.
+2. Garder les palettes propres à une section dans ses styles locaux.
+3. Privilégier la clarté, la lecture et des interactions prévisibles aux effets
+   décoratifs.
+4. Tester les écrans sur mobile, tablette et ordinateur, ainsi qu’au clavier.
+5. Ne pas traiter la navigation ou les rôles côté client comme une frontière de
+   sécurité; l’autorisation réelle relève du service serveur. Voir
+   [README.md](./README.md) pour le fonctionnement de l’authentification.

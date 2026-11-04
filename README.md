@@ -1,41 +1,61 @@
-# Novelee
+# Novelee — frontend
 
-Novelee est une plateforme communautaire dédiée à la lecture. Elle aide les lecteurs à découvrir des livres, échanger autour de leurs lectures et rejoindre des communautés par livre ou par genre.
+Novelee est une plateforme communautaire autour de la lecture. Le site présente le
+projet et ses services, propose une inscription à la liste d’attente de la bêta et
+fournit des parcours de connexion ainsi que des espaces d’interface pour les membres
+et l’administration.
 
-Ce dépôt contient le frontend de l’application, construit avec React, TypeScript et Vite. L’interface comprend une page d’accueil, des formulaires d’authentification, des espaces membre et administrateur, ainsi que des pages d’information.
+Ce dépôt contient le frontend, construit avec React, TypeScript et Vite. Les écrans
+connectés et certains services sont des bases d’interface : leur fonctionnement réel
+dépend de la configuration d’une API et de services métier.
 
-## Fonctionnalités
+## Sommaire
 
-- Présentation responsive des services de la communauté littéraire.
-- Inscription et connexion avec attribution du rôle `user` aux nouveaux comptes.
-- Navigation adaptée aux rôles `user` et `admin`.
-- Dashboards membre et administrateur.
-- Pages de profil, bibliothèques, archives, historique et paramètres.
-- Pages légales et gestion du consentement aux cookies.
+- [Prérequis](#prérequis)
+- [Installation et lancement](#installation-et-lancement)
+- [Scripts disponibles](#scripts-disponibles)
+- [Configuration](#configuration)
+- [Authentification](#authentification)
+- [Routes](#routes)
+- [Structure du projet](#structure-du-projet)
+- [Documentation complémentaire](#documentation-complémentaire)
 
-## Démarrage
+## Prérequis
 
-Prérequis : Node.js et npm.
+- Node.js compatible avec la version de Vite installée dans le projet.
+- npm.
+
+## Installation et lancement
+
+À la racine du dépôt :
 
 ```bash
 npm install
 npm run dev
 ```
 
-Vite affiche l’adresse locale à ouvrir dans le navigateur.
+Vite affiche l’adresse locale du serveur dans le terminal. Pour créer et prévisualiser
+une version de production :
 
-## Commandes
+```bash
+npm run build
+npm run preview
+```
 
-| Commande | Description |
+## Scripts disponibles
+
+| Script | Description |
 | --- | --- |
-| `npm run dev` | Démarre le serveur de développement Vite. |
-| `npm run build` | Vérifie les types TypeScript et construit l’application pour la production. |
-| `npm run preview` | Sert localement le dernier build de production. |
-| `npm run lint` | Exécute ESLint sur le projet. |
+| `npm run dev` | Lance le serveur de développement Vite. |
+| `npm run build` | Vérifie les projets TypeScript puis génère le build de production dans `dist/`. |
+| `npm run preview` | Sert localement le build de production. |
+| `npm run lint` | Exécute ESLint sur le dépôt. |
 
 ## Configuration
 
-Les variables d’environnement Vite sont facultatives. Crée un fichier `.env.local` à la racine pour les définir; ne commite pas de secrets dans ce fichier.
+La configuration publique du frontend est lue depuis les variables d’environnement
+préfixées par `VITE_`. Crée un fichier `.env.local` à la racine pour le développement
+local :
 
 ```dotenv
 VITE_MVP_URL=
@@ -44,16 +64,54 @@ VITE_AUTH_API_URL=
 VITE_CONTACT_EMAIL=
 ```
 
-- `VITE_MVP_URL` : destination du bouton principal de la page d’accueil.
-- `VITE_BETA_API_URL` : API d’inscription à la bêta.
-- `VITE_AUTH_API_URL` : endpoint d’authentification; s’il est vide, le mode démo local est utilisé.
-- `VITE_CONTACT_EMAIL` : adresse de contact affichée sur le site.
+| Variable | Rôle | Valeur par défaut |
+| --- | --- | --- |
+| `VITE_MVP_URL` | Destination du bouton principal de la page d’accueil. | `#beta` |
+| `VITE_BETA_API_URL` | URL appelée pour enregistrer une adresse sur la liste d’attente. | Désactivée |
+| `VITE_AUTH_API_URL` | URL du service d’inscription, de connexion et de réinitialisation du mot de passe. | Mode local de démonstration; la réinitialisation est désactivée |
+| `VITE_CONTACT_EMAIL` | Adresse de contact affichée dans le site. | Vide |
 
-### Contrat attendu pour l’API d’authentification
+Les variables `VITE_*` sont intégrées au code livré au navigateur : elles ne doivent
+jamais contenir de secret, de clé privée ou d’identifiant confidentiel. Ne commite pas
+`.env.local`.
 
-Le frontend envoie une requête `POST` avec `credentials: "include"` et un corps JSON contenant `action` et `email`. `password` est ajouté pour l’inscription et la connexion; `consent` est ajouté pour l’inscription.
+### API de liste d’attente
 
-Pour une connexion réussie, l’API doit répondre avec un utilisateur dans l’un des formats suivants :
+Lorsque `VITE_BETA_API_URL` est renseignée, le formulaire envoie une requête `POST`
+avec un corps JSON de la forme :
+
+```json
+{
+  "email": "lecteur@example.com",
+  "consent": true
+}
+```
+
+Toute réponse HTTP réussie est considérée comme une inscription enregistrée. Sans URL
+configurée, le formulaire indique que les inscriptions en ligne ne sont pas encore
+activées.
+
+### API d’authentification
+
+Lorsque `VITE_AUTH_API_URL` est renseignée, le frontend envoie une requête `POST` avec
+`Content-Type: application/json` et `credentials: "include"`. Les données envoyées
+dépendent de l’action :
+
+```json
+{
+  "action": "login",
+  "email": "lecteur@example.com",
+  "password": "mot-de-passe"
+}
+```
+
+Les actions acceptées sont `login`, `register` et `reset`. L’inscription ajoute
+`consent: true` et le formulaire de réinitialisation n’envoie pas de mot de passe.
+L’API doit vérifier les entrées, gérer les mots de passe et les sessions, appliquer
+les autorisations côté serveur et attribuer le rôle `user` aux inscriptions publiques.
+
+Pour une connexion réussie, la réponse JSON doit fournir l’adresse e-mail et le rôle
+`user` ou `admin`, directement ou dans une propriété `user` :
 
 ```json
 {
@@ -64,57 +122,71 @@ Pour une connexion réussie, l’API doit répondre avec un utilisateur dans l�
 }
 ```
 
-ou directement :
+Le champ facultatif `createdAt` est conservé s’il s’agit d’une chaîne de caractères.
+Sans ce champ, le frontend crée une date au moment de la connexion. Les actions
+d’inscription et de réinitialisation sont considérées réussies lorsque la réponse HTTP
+est réussie.
 
-```json
-{
-  "email": "admin@example.com",
-  "role": "admin"
-}
-```
+Si l’URL d’authentification est absente, l’inscription et la connexion utilisent le
+stockage du navigateur. Ce mode est réservé au développement et à la démonstration :
+les rôles et données conservés côté client ne constituent pas une sécurité et ne
+conviennent pas à de vrais comptes.
 
-Le rôle doit être `user` ou `admin`. L’API doit elle-même vérifier les identifiants, appliquer les permissions et attribuer le rôle `user` lors d’une inscription publique. L’interface seule ne constitue pas un contrôle d’accès sécurisé.
+#### Comptes de démonstration en développement
 
-## Comptes de démonstration
+En mode développement (`npm run dev`), les comptes suivants sont créés par le service
+d’authentification locale :
 
-En développement, quand `VITE_AUTH_API_URL` n’est pas défini, des comptes locaux permettent de tester les deux espaces :
-
-| Rôle | Adresse | Mot de passe | Destination |
+| Rôle | Adresse | Mot de passe | Destination après connexion |
 | --- | --- | --- | --- |
 | Membre | `lecteur@novelee.test` | `DemoUser!2026` | `/dashboard` |
 | Administrateur | `admin@novelee.test` | `DemoAdmin!2026` | `/admin/dashboard` |
 
-Les inscriptions créées depuis le formulaire reçoivent toujours le rôle `user`.
+Ces comptes sont exclusivement destinés à la démonstration locale. La session et les
+comptes sont enregistrés dans le navigateur; effacer les données du site supprime les
+comptes locaux enregistrés.
 
-> **Limite de sécurité :** les comptes de démonstration et les comptes créés localement sont enregistrés dans le navigateur. Les données et rôles peuvent être modifiés par l’utilisateur; ce mode est réservé à la démonstration et ne doit pas servir pour des comptes réels ou des données sensibles.
+## Routes
 
-## Routes principales
+| Route | Accès / contenu |
+| --- | --- |
+| `/` | Page d’accueil et formulaire de liste d’attente. |
+| `/connexion` | Connexion. |
+| `/inscription` | Création d’un compte. |
+| `/mot-de-passe-oublie` | Demande de réinitialisation du mot de passe (nécessite l’API). |
+| `/dashboard`, `/accueil` | Tableau de bord membre. |
+| `/bibliotheques`, `/archives` | Espaces membre. |
+| `/profil`, `/profil/parametres`, `/profil/historique` | Profil et espaces associés. |
+| `/admin/dashboard` | Tableau de bord administrateur. |
+| `/admin/utilisateurs`, `/admin/historique` | Espaces d’administration. |
+| `/admin/profil`, `/admin/parametres` | Profil et paramètres administrateur. |
+| `/deconnexion` | Déconnexion. |
+| `/mentions-legales`, `/confidentialite`, `/conditions-utilisation` | Informations légales. |
+| `/cookies`, `/gestion-protection-donnees`, `/accessibilite` | Informations sur les cookies, les données et l’accessibilité. |
+| `/signalement` | Page de signalement. |
 
-| Espace | Route | Description |
-| --- | --- | --- |
-| Public | `/` | Page d’accueil. |
-| Public | `/connexion` | Connexion. |
-| Public | `/inscription` | Création d’un compte membre. |
-| Membre | `/dashboard`, `/accueil` | Tableau de bord membre. |
-| Membre | `/bibliotheques`, `/archives` | Bibliothèques et archives. |
-| Membre | `/profil`, `/profil/parametres`, `/profil/historique` | Profil et pages associées. |
-| Admin | `/admin/dashboard` | Tableau de bord administrateur. |
-| Admin | `/admin/utilisateurs` | Liste des comptes connus du mode courant. |
-| Admin | `/admin/historique`, `/admin/profil`, `/admin/parametres` | Historique, profil et paramètres admin. |
-| Public | `/mentions-legales`, `/confidentialite`, `/conditions-utilisation`, `/cookies`, `/accessibilite` | Informations légales. |
+Les pages d’espaces membre et administrateur sont actuellement des interfaces de base,
+pas des fonctionnalités métier complètes. La vérification d’accès faite dans le
+frontend améliore la navigation, mais seule l’API peut imposer des autorisations
+fiables.
 
-Les pages d’historique, d’archives et de paramètres sont des bases d’interface; leurs fonctionnalités métier nécessitent encore un service de données.
-
-## Organisation du code
+## Structure du projet
 
 ```text
 src/
-  components/layout/       En-tête, pied de page et bandeau cookies
-  features/auth/            Authentification et stockage de démonstration
-  features/beta/            Inscription à la bêta
-  features/landing/         Sections de la page d’accueil
-  lib/                      Configuration et navigation par rôle
-  pages/                    Pages, dashboards et espaces de rôle
+  components/layout/       En-tête, pied de page, consentement aux cookies et retour en haut
+  features/auth/           Formulaires d’authentification et service local de démonstration
+  features/beta/            Formulaire de liste d’attente de la bêta
+  features/landing/         Sections, contenu et icônes de la page d’accueil
+  hooks/                    Hooks, dont la gestion du consentement aux cookies
+  lib/                      Configuration du site et navigation par rôle
+  pages/                    Pages, dashboards, espaces de rôle et pages d’information
 ```
 
-Les conventions visuelles et les règles de mise en page sont décrites dans [`design.md`](./design.md).
+Les styles globaux se trouvent dans `src/index.css` et `src/App.css`. Les styles
+propres à un composant ou à une page sont regroupés près de leur fonctionnalité.
+
+## Documentation complémentaire
+
+Les conventions visuelles, la palette et les principes d’accessibilité sont détaillés
+dans [`design.md`](./design.md).
