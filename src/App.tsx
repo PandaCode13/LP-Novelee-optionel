@@ -1,5 +1,4 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import BackToTop from './components/layout/BackToTop'
 import CookieBanner from './components/layout/CookieBanner'
 import Footer from './components/layout/Footer'
 import Header from './components/layout/Header'
@@ -71,7 +70,6 @@ function App() {
       </Routes>
       <Footer />
       <CookieBanner />
-      <BackToTop />
     </BrowserRouter>
   )
 }
