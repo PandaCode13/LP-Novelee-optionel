@@ -154,12 +154,20 @@ comptes locaux enregistrés.
 | `/connexion` | Connexion. |
 | `/inscription` | Création d’un compte. |
 | `/mot-de-passe-oublie` | Demande de réinitialisation du mot de passe (nécessite l’API). |
-| `/dashboard`, `/accueil` | Tableau de bord membre. |
-| `/bibliotheques`, `/archives` | Espaces membre. |
-| `/profil`, `/profil/parametres`, `/profil/historique` | Profil et espaces associés. |
-| `/admin/dashboard` | Tableau de bord administrateur. |
-| `/admin/utilisateurs`, `/admin/historique` | Espaces d’administration. |
-| `/admin/profil`, `/admin/parametres` | Profil et paramètres administrateur. |
+| `/dashboard` | Tableau de bord membre (`src/pages/user/DashboardPage.tsx`). |
+| `/accueil` | Accueil membre (`src/pages/user/AccueilPage.tsx`). |
+| `/bibliotheques` | Bibliothèques (`src/pages/user/LibrariesPage.tsx`). |
+| `/archives` | Archives (`src/pages/user/ArchivesPage.tsx`). |
+| `/conversations` | Conversations (`src/pages/user/ConversationsPage.tsx`). |
+| `/notifications` | Notifications (`src/pages/user/NotificationsPage.tsx`). |
+| `/profil` | Profil membre (`src/pages/user/ProfilePage.tsx`). |
+| `/profil/parametres` | Paramètres du profil (`src/pages/user/ProfileSettingsPage.tsx`). |
+| `/profil/historique` | Historique membre (`src/pages/user/ProfileHistoryPage.tsx`). |
+| `/admin/dashboard` | Tableau de bord administrateur (`src/pages/admin/DashboardPage.tsx`). |
+| `/admin/utilisateurs` | Gestion des utilisateurs (`src/pages/admin/UsersPage.tsx`). |
+| `/admin/historique` | Historique admin (`src/pages/admin/HistoryPage.tsx`). |
+| `/admin/profil` | Profil admin (`src/pages/admin/ProfilePage.tsx`). |
+| `/admin/parametres` | Paramètres admin (`src/pages/admin/SettingsPage.tsx`). |
 | `/deconnexion` | Déconnexion. |
 | `/mentions-legales`, `/confidentialite`, `/conditions-utilisation` | Informations légales. |
 | `/cookies`, `/gestion-protection-donnees`, `/accessibilite` | Informations sur les cookies, les données et l’accessibilité. |
@@ -180,11 +188,19 @@ src/
   features/landing/         Sections, contenu et icônes de la page d’accueil
   hooks/                    Hooks, dont la gestion du consentement aux cookies
   lib/                      Configuration du site et navigation par rôle
-  pages/                    Pages, dashboards, espaces de rôle et pages d’information
+  pages/
+    admin/                  Fichier de page dédié à chaque écran administrateur
+    styles/                 Feuilles de style des espaces membre et admin
+    user/                   Fichier de page dédié à chaque écran membre
+                            Pages publiques et d’information à la racine de pages/
 ```
 
 Les styles globaux se trouvent dans `src/index.css` et `src/App.css`. Les styles
 propres à un composant ou à une page sont regroupés près de leur fonctionnalité.
+Chaque écran membre ou administrateur a son propre composant dans `src/pages/user/`
+ou `src/pages/admin/`. Pour ajouter un écran, crée son fichier dans le dossier du rôle,
+puis enregistre son chemin dans `src/App.tsx` et ajoute son lien dans
+`src/lib/navigation.ts` si l’écran doit apparaître dans le menu.
 
 ## Documentation complémentaire
 

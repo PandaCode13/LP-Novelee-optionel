@@ -17,6 +17,8 @@ export const navByRole: Record<Role, NavItem[]> = {
     { label: 'Accueil', to: '/accueil' },
     { label: 'Bibliothèques', to: '/bibliotheques' },
     { label: 'Archives', to: '/archives' },
+    { label: 'Conversations', to: '/conversations' },
+    { label: 'Notifications', to: '/notifications' },
     {
       label: 'Profil',
       to: '/profil',
@@ -32,6 +34,10 @@ export const navByRole: Record<Role, NavItem[]> = {
     { label: 'Dashboard', to: '/admin/dashboard' },
     { label: 'Gestion des users', to: '/admin/utilisateurs' },
     { label: 'Historique', to: '/admin/historique' },
+    {
+      label: 'Notifications',
+      to: '/admin/notifications',
+    },
     {
       label: 'Profil',
       to: '/admin/profil',
