@@ -5,23 +5,10 @@ import { navByRole, type NavItem } from '../../lib/navigation'
 
 const navigation = [
   { label: 'Les problèmes', href: '/#problemes' },
-  { label: 'Solutions', href: '/#solutions' },
-  { label: 'Services', href: '/#services' },
-  { label: 'À propos', href: '/#about' },
+  { label: 'Nos solutions', href: '/#solutions' },
+  { label: 'À propos de nous', href: '/#about' },
   { label: 'Contact', href: '/#contact' },
 ]
-
-function BrandMark() {
-  return (
-    <svg className="brand-mark" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <path
-        d="M7 5.5h11.8c4.5 0 7.2 2.5 7.2 6.4 0 3.2-2.1 5.4-5.3 6l6.1 8.6h-6.2l-5.4-8h-2.8v8H7V5.5Zm5.4 4.7v3.8h6c1.6 0 2.4-.7 2.4-1.9s-.8-1.9-2.4-1.9h-6Z"
-        fill="currentColor"
-      />
-      <path d="M5 7.5v17" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-    </svg>
-  )
-}
 
 function readHeaderUser() {
   try {
@@ -88,8 +75,7 @@ function Header() {
     <header className="site-header">
       <div className="header-inner">
         <Link className="brand" to="/" aria-label="Novelee, accueil">
-          <BrandMark />
-          <span>Novelee</span>
+          <img className="brand-logo" src="/novelee-logo.png" alt="" />
         </Link>
         <button
           className="menu-toggle"
@@ -112,30 +98,28 @@ function Header() {
             )}
           </svg>
         </button>
-        <nav
-          className={`main-nav${menuOpen ? ' is-open' : ''}`}
-          id="main-navigation"
-          aria-label="Navigation principale"
-        >
-          {user ? (
-            navByRole[user.role].map((item) => renderItem(item, item.to))
-          ) : (
-            <>
-              {navigation.map((item) => (
+        <div className={`header-menu${menuOpen ? ' is-open' : ''}`}>
+          <nav className="main-nav" id="main-navigation" aria-label="Navigation principale">
+            {user ? (
+              navByRole[user.role].map((item) => renderItem(item, item.to))
+            ) : (
+              navigation.map((item) => (
                 <a key={item.href} href={item.href} onClick={() => setMenuOpen(false)}>
                   {item.label}
                 </a>
-              ))}
-              <Link
-                className="nav-join"
-                to="/connexion"
-                onClick={() => setMenuOpen(false)}
-              >
-                Rejoins-nous
-              </Link>
-            </>
+              ))
+            )}
+          </nav>
+          {!user && (
+            <Link
+              className="nav-join"
+              to="/inscription"
+              onClick={() => setMenuOpen(false)}
+            >
+              Je m’inscris
+            </Link>
           )}
-        </nav>
+        </div>
       </div>
     </header>
   )

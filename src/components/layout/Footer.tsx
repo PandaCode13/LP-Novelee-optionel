@@ -6,6 +6,7 @@ const legalLinks = [
   { label: 'Confidentialité', to: '/confidentialite' },
   { label: 'Conditions d’utilisation', to: '/conditions-utilisation' },
   { label: 'Cookies', to: '/cookies' },
+  { label: 'Gestion des données', to: '/gestion-protection-donnees' },
   { label: 'Accessibilité', to: '/accessibilite' },
 ]
 
