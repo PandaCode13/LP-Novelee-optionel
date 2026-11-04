@@ -1,23 +1,23 @@
 export const problems = [
   {
-    icon: '♡',
-    title: 'Lire, souvent en solo',
-    description: 'Tu refermes un livre qui t’a bouleversé·e… sans personne à qui en parler.',
+    title: 'Lecteur = solitaire ?',
+    description: [
+      'La lecture est souvent considérée comme un passe-temps ou une passion uniquement solitaire.',
+      'De ce fait, de nombreux lecteurs se retrouvent isolés et peinent à trouver des personnes avec qui partager des moments de lecture.',
+    ],
   },
   {
-    icon: '⌕',
-    title: 'Les bonnes personnes, où ?',
-    description: 'Trouver des lecteurs qui aiment vraiment les mêmes histoires, c’est compliqué.',
+    title: 'Trop d’outils',
+    description: [
+      'Il existe une multitude d’outils dédiés aux lecteurs, dispersés sur différents supports, ce qui peut compliquer l’organisation de ses lectures.',
+      'Les applications existantes se ressemblent, mais aucune ne réunit toutes les fonctionnalités utiles au même endroit.',
+    ],
   },
   {
-    icon: '◌',
-    title: 'Des communautés trop vastes',
-    description: 'Au milieu de milliers d’avis, les conversations qui te ressemblent se perdent.',
-  },
-  {
-    icon: '!',
-    title: 'Les spoilers gâchent tout',
-    description: 'Difficile de discuter librement quand la prochaine révélation est partout.',
+    title: 'Librairies indépendantes',
+    description: [
+      'Beaucoup de librairies indépendantes sont contraintes de fermer leurs portes, éclipsées par les grands distributeurs.',
+    ],
   },
 ]
 
@@ -38,37 +38,3 @@ export const solutions = [
     description: 'Des conversations pensées autour des livres que tu as déjà lus.',
   },
 ]
-
-export const services = [
-  {
-    illustration: 'recommendations',
-    title: 'Recommandations sur mesure',
-    description: 'Découvre ton prochain coup de cœur grâce à tes lectures et aux avis de lecteurs proches.',
-  },
-  {
-    illustration: 'chat',
-    title: 'Chat en temps réel',
-    description: 'Prolonge une lecture dans des échanges privés ou des conversations de groupe.',
-  },
-  {
-    illustration: 'library',
-    title: 'Ta bibliothèque vivante',
-    description: 'Garde une trace de tes lectures, partage tes reviews et retrouve tes envies.',
-  },
-  {
-    illustration: 'groups',
-    title: 'Groupes par livre et par genre',
-    description: 'Rejoins des micro-communautés où les discussions vont droit au cœur des histoires.',
-  },
-  {
-    illustration: 'challenges',
-    title: 'Défis et rendez-vous',
-    description: 'Lis à ton rythme, participe aux défis et retrouve la communauté autour d’événements.',
-  },
-  {
-    illustration: 'assistant',
-    title: 'Un coup de pouce IA',
-    description: 'Un assistant suggère des lectures et aide à lancer la conversation. Tu gardes toujours la main.',
-    ai: true,
-  },
-] as const

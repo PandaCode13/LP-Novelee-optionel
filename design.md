@@ -29,23 +29,6 @@ Les principales couleurs de l’interface sont définies dans `src/index.css`.
 | Crème | `#F8EEE8` | Surfaces et sections douces. |
 | Blanc | `#FFFFFF` | Surfaces et contenu sur fond sombre. |
 
-### Palette de la section Communauté
-
-La section des services définit une palette locale dans
-`src/features/landing/ServicesSection.css`. La garder isolée évite de modifier
-l’apparence globale par inadvertance.
-
-| Rôle | Valeur |
-| --- | --- |
-| Fond de section | `#FFF8F2` |
-| Fond des cartes | `#FFFEFC` |
-| Bordeaux | `#790D32` |
-| Texte principal | `#35151C` |
-| Texte secondaire | `#72545A` |
-| Corail | `#F28A78` |
-| Bordures | `#F2D8CC` |
-| Badge de l’assistant IA | `#FFE9B5` |
-
 ## Typographie
 
 - **Titres et citations :** Bellefair, avec Georgia comme police de repli.

@@ -2,7 +2,6 @@ import AboutSection from '../features/landing/AboutSection'
 import ContactSection from '../features/landing/ContactSection'
 import HeroSection from '../features/landing/HeroSection'
 import ProblemSection from '../features/landing/ProblemSection'
-import ServicesSection from '../features/landing/ServicesSection'
 import SolutionSection from '../features/landing/SolutionSection'
 import BetaSignupSection from '../features/beta/BetaSignupSection'
 
@@ -21,7 +20,6 @@ function HomePage() {
       </div>
       <ProblemSection />
       <SolutionSection />
-      <ServicesSection />
       <AboutSection />
       <BetaSignupSection />
       <ContactSection />
