@@ -1,4 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import BackToTop from './components/layout/BackToTop'
 import CookieBanner from './components/layout/CookieBanner'
 import Footer from './components/layout/Footer'
 import Header from './components/layout/Header'
@@ -8,6 +9,7 @@ import HomePage from './pages/HomePage'
 import LegalPage from './pages/LegalPage'
 import LogoutPage from './pages/LogoutPage'
 import NotFoundPage from './pages/NotFoundPage'
+import ReportPage from './pages/ReportPage'
 import RoleAreaPage from './pages/RoleAreaPage'
 import './App.css'
 
@@ -42,12 +44,18 @@ function App() {
         <Route path="/mentions-legales" element={<LegalPage document="legal" />} />
         <Route path="/confidentialite" element={<LegalPage document="privacy" />} />
         <Route path="/conditions-utilisation" element={<LegalPage document="terms" />} />
+        <Route path="/signalement" element={<ReportPage />} />
         <Route path="/cookies" element={<LegalPage document="cookies" />} />
+        <Route
+          path="/gestion-protection-donnees"
+          element={<LegalPage document="data-protection" />}
+        />
         <Route path="/accessibilite" element={<LegalPage document="accessibility" />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
       <Footer />
       <CookieBanner />
+      <BackToTop />
     </BrowserRouter>
   )
 }
