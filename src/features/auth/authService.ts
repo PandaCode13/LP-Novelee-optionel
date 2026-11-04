@@ -1,3 +1,5 @@
+import { siteConfig } from '../../lib/siteConfig'
+
 export type UserRole = 'user' | 'admin'
 
 export type AuthUser = {
@@ -19,6 +21,7 @@ const demoUserEmail = 'lecteur@novelee.test'
 const demoUserPassword = 'DemoUser!2026'
 const passwordIterations = 120_000
 const textEncoder = new TextEncoder()
+const localDemoEnabled = import.meta.env.DEV || siteConfig.authDemoMode
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null
@@ -117,7 +120,7 @@ export function startUserSession(user: AuthUser) {
 export async function registerLocalAccount(email: string, password: string) {
   const normalizedEmail = normalizeEmail(email)
   if (
-    import.meta.env.DEV &&
+    localDemoEnabled &&
     (normalizedEmail === demoAdminEmail || normalizedEmail === demoUserEmail)
   ) {
     throw new Error('Cette adresse est réservée à un compte de démonstration.')
@@ -144,7 +147,7 @@ export async function registerLocalAccount(email: string, password: string) {
 }
 
 async function ensureDemoAccounts() {
-  if (!import.meta.env.DEV) return
+  if (!localDemoEnabled) return
 
   const accounts = readAccounts()
   const demoAccounts = [

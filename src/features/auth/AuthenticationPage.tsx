@@ -257,7 +257,7 @@ function AuthenticationPage({ mode }: { mode: AuthenticationMode }) {
             </p>
           </form>
 
-          {mode === 'login' && !siteConfig.authApiUrl && import.meta.env.DEV && (
+          {mode === 'login' && !siteConfig.authApiUrl && (import.meta.env.DEV || siteConfig.authDemoMode) && (
             <p className="auth-demo-hint">
               <span>Compte membre de démonstration :</span>
               <strong>lecteur@novelee.test</strong>

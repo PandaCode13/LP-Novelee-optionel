@@ -61,6 +61,7 @@ local :
 VITE_MVP_URL=
 VITE_BETA_API_URL=
 VITE_AUTH_API_URL=
+VITE_AUTH_DEMO_MODE=false
 VITE_CONTACT_EMAIL=
 ```
 
@@ -69,6 +70,7 @@ VITE_CONTACT_EMAIL=
 | `VITE_MVP_URL` | Destination du bouton principal de la page d’accueil. | `#beta` |
 | `VITE_BETA_API_URL` | URL appelée pour enregistrer une adresse sur la liste d’attente. | Désactivée |
 | `VITE_AUTH_API_URL` | URL du service d’inscription, de connexion et de réinitialisation du mot de passe. | Mode local de démonstration; la réinitialisation est désactivée |
+| `VITE_AUTH_DEMO_MODE` | Autorise les comptes locaux de démonstration dans un build de production. | `false` (les comptes de démo ne sont activés automatiquement qu’en développement) |
 | `VITE_CONTACT_EMAIL` | Adresse de contact affichée dans le site. | Vide |
 
 Les variables `VITE_*` sont intégrées au code livré au navigateur : elles ne doivent
@@ -132,7 +134,19 @@ stockage du navigateur. Ce mode est réservé au développement et à la démons
 les rôles et données conservés côté client ne constituent pas une sécurité et ne
 conviennent pas à de vrais comptes.
 
-#### Comptes de démonstration en développement
+#### Activer la démo en ligne
+
+Pour tester le site déployé sans backend, ajoute `VITE_AUTH_DEMO_MODE=true` dans les
+variables d’environnement de l’hébergeur, puis reconstruis et redéploie l’application.
+Cette variable est intégrée au frontend pendant le build. Si `VITE_AUTH_API_URL` est
+renseignée, l’API reste prioritaire et ce mode local n’est pas utilisé pour la connexion.
+
+**Attention :** ce mode rend les identifiants de démonstration publics et les sessions
+modifiables dans le navigateur. Les comptes admin ne sont pas protégés contre les
+visiteurs du site. N’active jamais ce mode pour une application contenant de vrais
+comptes ou des données sensibles; utilise alors une API d’authentification.
+
+#### Comptes de démonstration
 
 En mode développement (`npm run dev`), les comptes suivants sont créés par le service
 d’authentification locale :
