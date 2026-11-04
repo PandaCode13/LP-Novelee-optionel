@@ -1,19 +1,4 @@
-import { useEffect, useState } from 'react'
-
 function BackToTop() {
-  const [isVisible, setIsVisible] = useState(false)
-
-  useEffect(() => {
-    function updateVisibility() {
-      setIsVisible(window.scrollY > 400)
-    }
-
-    updateVisibility()
-    window.addEventListener('scroll', updateVisibility, { passive: true })
-
-    return () => window.removeEventListener('scroll', updateVisibility)
-  }, [])
-
   function scrollToTop() {
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
 
@@ -25,12 +10,10 @@ function BackToTop() {
 
   return (
     <button
-      className={`back-to-top${isVisible ? ' visible' : ''}`}
+      className="back-to-top"
       type="button"
       aria-label="Remonter en haut de la page"
       onClick={scrollToTop}
-      tabIndex={isVisible ? 0 : -1}
-      aria-hidden={!isVisible}
     >
       <svg
         aria-hidden="true"

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { siteConfig } from '../../lib/siteConfig'
+import BackToTop from './BackToTop'
 
 const legalLinks = [
   { label: 'Mentions légales', to: '/mentions-legales' },
@@ -37,6 +38,7 @@ function Footer() {
           ) : (
             <a href="/#contact">Nous contacter</a>
           )}
+          <BackToTop />
         </div>
       </div>
     </footer>
