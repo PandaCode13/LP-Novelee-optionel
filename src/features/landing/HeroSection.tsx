@@ -17,7 +17,7 @@ function HeroSection() {
             et ses fonctionnalités pensées pour <a href="#about">vous</a>.
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="#services">
+            <a className="button button-primary" href="#problemes">
               Je découvre
             </a>
             <Link className="button button-secondary" to="/inscription">

@@ -140,8 +140,8 @@ function DashboardPage({ requiredRole }: { requiredRole: UserRole }) {
               <div>
                 <p className="dashboard-kicker">Ta prochaine belle histoire</p>
                 <h2 id="member-welcome-title">La lecture est encore meilleure à plusieurs.</h2>
-                <p>Découvre les services Novelee et commence à échanger avec des lecteurs proches de toi.</p>
-                <Link className="button button-primary" to="/#services">Explorer les services <span aria-hidden="true">→</span></Link>
+                <p>Découvre les solutions Novelee et commence à échanger avec des lecteurs proches de toi.</p>
+                <Link className="button button-primary" to="/#solutions">Découvrir Novelee <span aria-hidden="true">→</span></Link>
               </div>
               <span className="dashboard-book" aria-hidden="true">✧</span>
             </section>
