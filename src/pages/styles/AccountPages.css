@@ -123,6 +123,19 @@
   overflow-wrap: anywhere;
 }
 
+.user-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-width: 250px;
+}
+
+.user-actions .button {
+  padding: 8px 11px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
 .role-area-role {
   display: inline-block;
   padding: 4px 9px;
